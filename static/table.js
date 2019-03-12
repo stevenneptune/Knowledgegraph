@@ -6,10 +6,11 @@ $(document).ready(function (){
             var t = $("table#result tbody").empty();
             if (!data || data.length == 0) return ;
             data.forEach(function (col){
-                t.append("<tr><td>"+col+"<\tr><\td>")
+                t.append("<tr><td>"+JSON.stringify(col,null,"\t")+"</td></tr>")
             });
         },"json");
+        return false;
     }
-
     $("#search").submit(search);
+    search();
 });

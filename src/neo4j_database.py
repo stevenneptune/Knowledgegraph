@@ -1,16 +1,19 @@
-from neo4j import GraphDatabase, Session
+from neo4j import GraphDatabase, Session,basic_auth
 from json import dumps
 
 
 class Neo4jDatabase(object):
     def __init__(self, uri, user, password):
-        self._driver = GraphDatabase.driver(uri, auth=(user, password))
+        self.driver = GraphDatabase.driver(uri, auth=basic_auth(user, password))
+
+    def creatSession(self):
+        return self.driver.session()
 
     def close(self):
-        self._driver.close()
+        self.driver.session().close()
 
-    def getRelatedNode(self, keywords, limit=50, key='m'):
-        with self._driver.session() as session:
+    def getRelatedNode(self, keywords, limit=50):
+        with self.creatSession() as session:
             result = session.run("MATCH (m)"
                                  "WHERE (any(prop in keys(m) WHERE m[prop] =~ {keywords})) "
                                  "RETURN m "
@@ -19,7 +22,7 @@ class Neo4jDatabase(object):
             return self.nodeToJson(result)
 
     def getNeighbourhood(self, ck):
-        with self._driver.session() as session:
+        with self.driver.session() as session:
             result = session.run("MATCH (m)-[]-(n)"
                                  "WHERE ID(m) = {ck}"
                                  "return m,n", {"ck": ck})
