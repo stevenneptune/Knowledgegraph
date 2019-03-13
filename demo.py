@@ -43,7 +43,7 @@ def get_graph():
 def get_relatednode(node):
     print(node)
     result = db.getNeighbourhood(node)
-    print(result)
+    # print(result)
     return Response(result)
 
 
@@ -53,4 +53,5 @@ if __name__ == '__main__':
     #print(db.getRelatedNode('of'))
     # print(db.getNeighbourhood('1'))
     app.run(port=8080, debug=True)
+    #print(db.getNeighbourhood('1'))
 

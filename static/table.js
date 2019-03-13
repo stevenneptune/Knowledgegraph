@@ -3,7 +3,7 @@ $(document).ready(function (){
     $.get("/relatednode/" + encodeURIComponent(id),
         function (data){
             if(!data) return;
-            t = $("#graph").empty();
+            t = $("table#details tbody").empty();
             data.forEach(function(col){
             t.append("<tr><td>"+JSON.stringify(col)+"</td></tr>");
             });
@@ -12,9 +12,6 @@ $(document).ready(function (){
     return false;
     }
 
-    function getck(index){
-        $.get()
-    }
 
     function search(){
     var query = $("#search").find("input[name=searchnode]").val();
@@ -22,17 +19,19 @@ $(document).ready(function (){
         function (data){
             var t = $("table#result tbody").empty();
             if (!data || data.length == 0) return ;
+            var i = 0;
             data.forEach(function (col){
-                var str = JSON.stringify(col).replace(/[\[\]']+/g,'').replace(/[\{\}']+/g,'').split('\",\"');
+                var str = JSON.stringify(col).replace(/[\[\]']+/g,'').replace(/[\{\}']+/g,'').split(',\"');
                 var display = "<tr>"
                 for (var a in str){
-                    display += ("<td>"+str[a]+"</td>");
+                    display += ("<td>"+str[a].replace('\"','')+"</td>");
                 //$("<tr><td>"+JSON.stringify(col,null,4).replace(/[\[\]']+/g,'').replace(/[\{\}']+/g,'')+"</td></tr>").appendTo(t)
                 //.click(function() )
                 }
-                t.append(display+"</tr>")
+                $(display+"</tr>").appendTo(t).click(function( ){showRelated(col.ck)});
+                i++;
             });
-            showRelated(1);
+            showRelated(data[0].ck);
         },"json");
         return false;
     }

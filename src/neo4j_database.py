@@ -23,20 +23,25 @@ class Neo4jDatabase(object):
 
     def getNeighbourhood(self, ck):
         with self.driver.session() as session:
-            result = session.run("MATCH (m)-[]-(n)"
+            result = session.run("MATCH (m)-[r]-(n)"
                                  "WHERE toString(ID(m)) = {ck}"
-                                 "return m,n", {"ck": ck})
-            return self.nodeToJson(result)
+                                 "return m as start,n as end,r as relationship", {"ck": ck})
+            return self.neibourToJson(result)
 
     @staticmethod
     def neibourToJson(result):
-        all_nodeJson = []
-        for node in result:
-            node_json_dict = {}
-            for i, j in node.value().items():
-                node_json_dict.update({i: j})
-            all_nodeJson.append(node_json_dict)
-        return dumps(all_nodeJson, indent=2)
+        relationships = result.graph().relationships
+        relationlist = []
+        for eachRel in relationships:
+            startnode = {}
+            for i, j in eachRel.start_node.items():
+                startnode.update({i: j})
+            endnode = {}
+            for i, j in eachRel.end_node.items():
+                endnode.update({i: j})
+            label = eachRel.type
+            relationlist.append([{'start': startnode}, {'end': endnode}, {'label': label}])
+        return dumps(relationlist, indent=2)
 
     @staticmethod
     def nodeToJson(result):
