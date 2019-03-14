@@ -19,6 +19,7 @@ class Neo4jDatabase(object):
                                  "RETURN m as nod, ID(m) as ck "
                                  "LIMIT {limit}", {"keywords": "(?i).*\\b" + keywords + "\\b.*", "limit": limit})
             # pointer of result
+            #print(self.nodeToJson(result))
             return self.nodeToJson(result)
 
     def getNeighbourhood(self, ck):
@@ -31,16 +32,32 @@ class Neo4jDatabase(object):
     @staticmethod
     def neibourToJson(result):
         relationships = result.graph().relationships
-        relationlist = []
+        relationlist = {}
+        index = 0
+        nodes = []
+        edges = []
         for eachRel in relationships:
-            startnode = {}
-            for i, j in eachRel.start_node.items():
-                startnode.update({i: j})
-            endnode = {}
-            for i, j in eachRel.end_node.items():
-                endnode.update({i: j})
-            label = eachRel.type
-            relationlist.append([{'start': startnode}, {'end': endnode}, {'label': label}])
+            startcaption = ""
+            endcaption = ""
+            if index == 0:
+                for i, j in eachRel.start_node.items():
+                    startcaption += i + ":" + str(j) + "\n"
+                nodes.append({'id': index, 'caption': startcaption})
+                index += 1
+                for i, j in eachRel.end_node.items():
+                    endcaption += (i + ":" + str(j) + "\n")
+                nodes.append({'id': index, 'caption': endcaption})
+                edgeLabel = eachRel.type
+                edges.append({'source': 0, 'target': 1, 'caption': edgeLabel})
+            else:
+                for i, j in eachRel.end_node.items():
+                    endcaption += (i + ":" + str(j) + "\n")
+                nodes.append({'id': index, 'caption': endcaption})
+                index += 1
+                edgeLabel = eachRel.type
+                edges.append({'source': 0, 'target': index, 'caption': edgeLabel})
+        relationlist.update({'nodes': nodes})
+        relationlist.update({'links': edges})
         return dumps(relationlist, indent=2)
 
     @staticmethod

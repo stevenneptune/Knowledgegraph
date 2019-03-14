@@ -1,0 +1,73 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "caption": "name:Tom Hanks\nborn:1956\n"
+    },
+    {
+      "id": 1,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    },
+    {
+      "id": 2,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    },
+    {
+      "id": 3,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    },
+    {
+      "id": 4,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    },
+    {
+      "id": 5,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    },
+    {
+      "id": 6,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    },
+    {
+      "id": 7,
+      "caption": "title:You've Got Mail\ntagline:At odds in life... in love on-line.\nreleased:1998\n"
+    }
+  ],
+  "edges": [
+    {
+      "source": 0,
+      "target": 1,
+      "caption": "ACTED_IN"
+    },
+    {
+      "source": 0,
+      "target": 3,
+      "caption": "DIRECTED"
+    },
+    {
+      "source": 0,
+      "target": 4,
+      "caption": "ACTED_IN"
+    },
+    {
+      "source": 0,
+      "target": 5,
+      "caption": "ACTED_IN"
+    },
+    {
+      "source": 0,
+      "target": 6,
+      "caption": "ACTED_IN"
+    },
+    {
+      "source": 0,
+      "target": 7,
+      "caption": "ACTED_IN"
+    },
+    {
+      "source": 0,
+      "target": 8,
+      "caption": "ACTED_IN"
+    }
+  ]
+}
