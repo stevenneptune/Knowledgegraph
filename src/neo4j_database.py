@@ -40,17 +40,17 @@ class Neo4jDatabase(object):
             startcaption = ""
             endcaption = ""
             if index == 0:
-                for i, j in eachRel.start_node.items():
+                for i, j in eachRel.end_node.items():
                     startcaption += i + ":" + str(j) + "\n"
                 nodes.append({'id': index, 'caption': startcaption})
                 index += 1
-                for i, j in eachRel.end_node.items():
+                for i, j in eachRel.start_node.items():
                     endcaption += (i + ":" + str(j) + "\n")
                 nodes.append({'id': index, 'caption': endcaption})
                 edgeLabel = eachRel.type
                 edges.append({'source': 0, 'target': 1, 'caption': edgeLabel})
             else:
-                for i, j in eachRel.end_node.items():
+                for i, j in eachRel.start_node.items():
                     endcaption += (i + ":" + str(j) + "\n")
                 nodes.append({'id': index, 'caption': endcaption})
                 index += 1

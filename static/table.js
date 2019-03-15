@@ -4,7 +4,7 @@ $(document).ready(function (){
         var width = 400, height = 400;
 
         var force = d3.layout.force()
-                .charge(-200).linkDistance(30).size([width,height]);
+                .charge(-200).linkDistance(100).size([width,height]);
 
         d3.select("svg").remove();
 
@@ -29,9 +29,10 @@ $(document).ready(function (){
                     .attr("r", 10)
                     .call(force.drag);
 
-            var linkText = svg.selectAll(".link")
+            var linkText = svg.selectAll(".linetext")
+                            .data(graph.links).enter()
                             .append("text")
-                            .attr("class", "link-label")
+                            .attr("class", "linetext")
                             .attr("font-family", "Arial, Helvetica, sans-serif")
                             .attr("fill", "Black")
                             .style("font", "normal 12px Arial")
