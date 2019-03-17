@@ -17,7 +17,7 @@ class Neo4jDatabase(object):
             result = session.run("MATCH (m)"
                                  "WHERE (any(prop in keys(m) WHERE toString(m[prop]) =~ {keywords})) "
                                  "RETURN m as nod, ID(m) as ck "
-                                 "LIMIT {limit}", {"keywords": "(?i).*\\b" + keywords + "\\b.*", "limit": limit})
+                                 "LIMIT {limit}", {"keywords": "(?i).*\\b" + str.strip(keywords) + "\\b.*", "limit": limit})
             # pointer of result
             #print(self.nodeToJson(result))
             return self.nodeToJson(result)
