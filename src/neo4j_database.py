@@ -1,5 +1,6 @@
-from neo4j import GraphDatabase, Session, basic_auth
+from neo4j import GraphDatabase, Session, basic_auth, BoltStatementResult, BoltStatementResultSummary
 from json import dumps
+import time
 
 
 class Neo4jDatabase(object):
@@ -17,17 +18,20 @@ class Neo4jDatabase(object):
             result = session.run("MATCH (m)"
                                  "WHERE (any(prop in keys(m) WHERE toString(m[prop]) =~ {keywords})) "
                                  "RETURN m as nod, ID(m) as ck "
-                                 "LIMIT {limit}", {"keywords": "(?i).*\\b" + str.strip(keywords) + "\\b.*", "limit": limit})
+                                 # "LIMIT {limit}",
+                                 , {"keywords": "(?i).*\\b" + str.strip(keywords) + "\\b.*"})
             # pointer of result
-            #print(self.nodeToJson(result))
-            return self.nodeToJson(result)
+            # print(self.nodeToJson(result))
+
+            return result
 
     def getNeighbourhood(self, ck):
+        #print(type(ck))
         with self.driver.session() as session:
             result = session.run("MATCH (m)-[r]-(n)"
                                  "WHERE toString(ID(m)) = {ck}"
                                  "return m as start,n as end,r as relationship", {"ck": ck})
-            return self.neibourToJson(result)
+            return result
 
     @staticmethod
     def neibourToJson(result):
@@ -73,3 +77,17 @@ class Neo4jDatabase(object):
                         dic.update({j: k})
             all_node_json.append(dic)
         return dumps(all_node_json)
+
+    def getNodeTime(self, keywords):
+        total_time = 0.0
+        start = time.time()
+        result = self.getRelatedNode(keywords)
+        total_time = time.time() - start
+        return total_time
+
+    def getNeiTime(self, ck):
+        total_time = 0.0
+        start = time.time()
+        result = self.getNeighbourhood(ck)
+        total_time = time.time() - start
+        return total_time

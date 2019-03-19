@@ -35,7 +35,7 @@ def get_graph():
     else:
         result = db.getRelatedNode(keywords=q)
         #print(result)
-        return Response(result)
+        return Response(db.nodeToJson(result))
     return False
 
 
@@ -44,7 +44,7 @@ def get_relatednode(node):
     print(node)
     result = db.getNeighbourhood(node)
     #print(result)
-    return Response(result)
+    return Response(db.nodeToJson(result))
 
 
 
