@@ -1,0 +1,3 @@
+SELECT *
+FROM firstedge
+WHERE NODE_ID = ID

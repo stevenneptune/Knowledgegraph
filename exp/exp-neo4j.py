@@ -9,7 +9,7 @@ db = Neo4jDatabase(uri, user, password)
 
 
 def main():
-    hf_key_list = ["china", "love", "see", "konw", "came", "project", "say", "work", "people", "money"]
+    hf_key_list = ["china", "love", "see", "know", "came", "project", "say", "work", "people", "money"]
     lf_key_list = ["pillar", "cargo", "spider", "fork", "velocity", "boost", "welcome", "pony", "honey", "scholarship"]
     # result = db.getRelatedNode(keywords="china")
     # print(result)
