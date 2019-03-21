@@ -1,3 +1,17 @@
-SELECT *
+SELECT HAS_CREATOR_ID,
+      IS_LOCATED_IN_ID,
+      REPLY_OF_ID,
+      CONTAINER_OF_ID,
+      HAS_MEMBER_ID,
+      HAS_MODERATOR_ID,
+      HAS_TAG_ID,
+      HAS_INTEREST_ID,
+      KNOWS_ID,
+      LIKES_ID,
+      IS_PART_OF_ID,
+      IS_SUBCLASS_OF_ID,
+      HAS_TYPE_ID,
+      STUDY_AT_ID,
+      WORK_AT_ID
 FROM firstedge
-WHERE NODE_ID = ID
+WHERE firstedge.NODE_ID = :CK
