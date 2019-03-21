@@ -11,20 +11,20 @@ db = Neo4jDatabase(uri, user, password)
 def main():
     hf_key_list = ["china", "love", "see", "know", "came", "project", "say", "work", "people", "money"]
     lf_key_list = ["pillar", "cargo", "spider", "fork", "velocity", "boost", "welcome", "pony", "honey", "scholarship"]
-    # result = db.getRelatedNode(keywords="china")
-    # print(result)
-    # print("hf")
+    result = db.getRelatedNode(keywords="china")
+    print(result)
+    print("hf")
 
-    # for i in hf_key_list:
-    #     print(db.getNodeTime(keywords=i))
-    #
-    # print("lf")
-    # for j in lf_key_list:
-    #     print(db.getNodeTime(keywords=j))
+    for i in hf_key_list:
+        print(db.getNodeTime(keywords=i))
+
+    print("lf")
+    for j in lf_key_list:
+        print(db.getNodeTime(keywords=j))
 
     print("nei")
     for i in range(100):
-        ck = random.randint(0, 29987834)
+        ck = random.randint(0, 3240318)
         print(db.getNeiTime(ck=ck))
 
 
