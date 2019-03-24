@@ -29,8 +29,8 @@ class Neo4jDatabase(object):
         #print(type(ck))
         with self.driver.session() as session:
             result = session.run("MATCH (m)-[r]-(n)"
-                                 "WHERE toString(ID(m)) = {ck}"
-                                 "return m as start,n as end,r as relationship", {"ck": ck})
+                                 "WHERE ID(m) = {ck}"
+                                 "return m as start,n as end,r as relationship", {"ck": int(ck)})
             return result
 
     @staticmethod

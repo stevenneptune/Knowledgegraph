@@ -55,10 +55,39 @@ class VerticaDatabase(object):
         result = cur.fetchall()
         return result
 
+    def getNeighbourhood(self, ck):
+        cur = self.connection.cursor('dict')
+        cur.execute(
+            "SELECT "
+            "FIRSTEDGE.NODE_ID,"
+            "HAS_CREATOR_ID,"
+            "IS_LOCATED_IN_ID,"
+            "REPLY_OF_ID,"
+            "CONTAINER_OF_ID,"
+            "HAS_MEMBER_ID,"
+            "HAS_MODERATOR_ID,"
+            "HAS_TAG_ID,"
+            "HAS_INTEREST_ID,"
+            "KNOWS_ID,"
+            "LIKES_ID,"
+            "IS_PART_OF_ID,"
+            "IS_SUBCLASS_OF_ID,"
+            "HAS_TYPE_ID,"
+            "STUDY_AT_ID,"
+            "WORK_AT_ID "
+            "FROM "
+            "firstedge,VERTEX "
+            "WHERE "
+            "firstedge.NODE_ID = :CK "
+            "AND VERTEX.NODE_ID = firstedge.NODE_ID;", {'CK': int(ck)}
+        )
+        result = cur.fetchall();
+        return result
+
     def getNodeTime(self, keywords):
         total_time = 0.0
         start = time.time()
         result = self.getRelatedNode(keywords=keywords)
-        #print(result.__len__())
+        # print(result.__len__())
         total_time = time.time() - start
         return total_time
