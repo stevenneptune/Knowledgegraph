@@ -58,28 +58,50 @@ class VerticaDatabase(object):
     def getNeighbourhood(self, ck):
         cur = self.connection.cursor('dict')
         cur.execute(
-            "SELECT "
-            "FIRSTEDGE.NODE_ID,"
-            "HAS_CREATOR_ID,"
-            "IS_LOCATED_IN_ID,"
-            "REPLY_OF_ID,"
-            "CONTAINER_OF_ID,"
-            "HAS_MEMBER_ID,"
-            "HAS_MODERATOR_ID,"
-            "HAS_TAG_ID,"
-            "HAS_INTEREST_ID,"
-            "KNOWS_ID,"
-            "LIKES_ID,"
-            "IS_PART_OF_ID,"
-            "IS_SUBCLASS_OF_ID,"
-            "HAS_TYPE_ID,"
-            "STUDY_AT_ID,"
-            "WORK_AT_ID "
-            "FROM "
-            "firstedge,VERTEX "
-            "WHERE "
-            "firstedge.NODE_ID = :CK "
-            "AND VERTEX.NODE_ID = firstedge.NODE_ID;", {'CK': int(ck)}
+            "WITH TARGET_NODE AS("
+            "SELECT * "
+            "FROM firstedge "
+            "WHERE firstedge.NODE_ID = :CK "
+            "),"
+            "NEIBOUR_NODE AS("
+            "SELECT HAS_CREATOR_ID AS NEI_ID,'HAS_CREATOR_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT IS_LOCATED_IN_ID AS NEI_ID,'IS_LOCATED_IN_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT REPLY_OF_ID AS NEI_ID,'REPLY_OF_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT CONTAINER_OF_ID AS NEI_ID,'CONTAINER_OF_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT HAS_MEMBER_ID AS NEI_ID,'HAS_MEMBER_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT HAS_MODERATOR_ID AS NEI_ID,'HAS_MODERATOR_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT HAS_TAG_ID AS NEI_ID ,'HAS_TAG_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT HAS_INTEREST_ID AS NEI_ID,'HAS_INTEREST_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT KNOWS_ID AS NEI_ID,'KNOWS_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT LIKES_ID AS NEI_ID,'LIKES_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT IS_PART_OF_ID AS NEI_ID,'IS_PART_OF_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT IS_SUBCLASS_OF_ID AS NEI_ID,'IS_SUBCLASS_OF_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT HAS_TYPE_ID AS NEI_ID,'HAS_TYPE_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT STUDY_AT_ID AS NEI_ID,'STUDY_AT_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "UNION ALL "
+            "SELECT WORK_AT_ID AS NEI_ID,'WORK_AT_ID' AS 'EDGE_LABEL' FROM TARGET_NODE "
+            "),"
+            "FS_JOIN AS ("
+            "SELECT NEI_ID,EDGE_LABEL,ENDNODEID "
+            "FROM NEIBOUR_NODE LEFT JOIN secondedge ON NEI_ID = VALUEID "
+            ")"
+            "SELECT * "
+            "FROM vertex,FS_JOIN "
+            "WHERE vertex.NODE_ID = FS_JOIN.NEI_ID OR "
+            "vertex.NODE_ID = FS_JOIN.ENDNODEID ;", {'CK': int(ck)}
         )
         result = cur.fetchall();
         return result
@@ -89,5 +111,13 @@ class VerticaDatabase(object):
         start = time.time()
         result = self.getRelatedNode(keywords=keywords)
         # print(result.__len__())
+        total_time = time.time() - start
+        return total_time
+
+
+    def getNeiTime(self,ck):
+        total_time = 0.0
+        start = time.time()
+        result = self.getNeighbourhood(ck=ck)
         total_time = time.time() - start
         return total_time
