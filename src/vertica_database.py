@@ -26,7 +26,7 @@ class VerticaDatabase(object):
         self.connection = vertica_python.connect(**conn_info)
 
     def close(self):
-        self.connection.close();
+        self.connection.close()
 
     def getRelatedNode(self, keywords):
         # with self.connection as connection:
@@ -103,7 +103,7 @@ class VerticaDatabase(object):
             "WHERE vertex.NODE_ID = FS_JOIN.NEI_ID OR "
             "vertex.NODE_ID = FS_JOIN.ENDNODEID ;", {'CK': int(ck)}
         )
-        result = cur.fetchall();
+        result = cur.fetchall()
         return result
 
     def getNodeTime(self, keywords):
